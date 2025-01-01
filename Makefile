@@ -4,7 +4,7 @@ CXXFLAGS = -fPIC \
            -Iinclude \
            -Wall \
            -Wextra \
-           -std=c++17 \
+           -std=c++11 \
            -fpermissive \
            -pthread
 LDFLAGS = -shared

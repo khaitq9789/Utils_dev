@@ -1,7 +1,5 @@
 
-
 #include "MessageQueue.h"
-
 
 void MessageQueue::enqueueMessage(const std::shared_ptr<Message>& message) {
     std::lock_guard<std::mutex> lock(mutex);
