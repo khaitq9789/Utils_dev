@@ -18,18 +18,6 @@
 #endif
 
 
-#if LOG_ENABLED
-inline std::shared_ptr<std::ofstream>& get_log_file_ptr() {
-    static std::shared_ptr<std::ofstream> log_file_ptr = nullptr;
-    if (!log_file_ptr) {
-        log_file_ptr = std::make_shared<std::ofstream>(LOG_FILE_PATH, std::ios::app);
-        if (!log_file_ptr->is_open()) {
-            std::cerr << "Không thể mở tệp log tại: " << LOG_FILE_PATH << std::endl;
-        }
-    }
-    return log_file_ptr;
-}
-#endif
 
 // Hàm xử lý dấu cách thừa
 inline std::string trim(const std::string& str) {
@@ -98,7 +86,13 @@ std::string stringify(const char* names, const Args&... args) {
     do {                                                \
         std::string log_msg = stringify(#__VA_ARGS__, __VA_ARGS__); \
         std::cout << "[" << __FILE__ << "::" << __func__ << "] " << log_msg << std::endl;          \
-        auto& log_file_ptr = get_log_file_ptr();        \
+        static std::shared_ptr<std::ofstream> log_file_ptr = nullptr;  \
+        if (!log_file_ptr) {            \
+            log_file_ptr = std::make_shared<std::ofstream>(LOG_FILE_PATH, std::ios::app);   \
+            if (!log_file_ptr->is_open()) {             \
+                std::cerr << "Không thể mở tệp log tại: " << LOG_FILE_PATH << std::endl;        \
+            }       \
+        }               \
         if (log_file_ptr && log_file_ptr->is_open()) {  \
             *log_file_ptr << "[" << __FILE__ << "::" << __func__ << "] " << log_msg << std::endl; \
         }                                               \
