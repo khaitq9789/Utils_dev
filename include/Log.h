@@ -17,9 +17,6 @@
 #define LOG_FILE_PATH "/tmp/default.log"
 #endif
 
-#ifndef LOG_TO_CONSOLE
-#define LOG_TO_CONSOLE 1  // 1: Bật log ra console, 0: Tắt
-#endif
 
 #if LOG_ENABLED
 inline std::shared_ptr<std::ofstream>& get_log_file_ptr() {
@@ -100,9 +97,7 @@ std::string stringify(const char* names, const Args&... args) {
 #define DEBUG_LOG(...)                                  \
     do {                                                \
         std::string log_msg = stringify(#__VA_ARGS__, __VA_ARGS__); \
-        if (LOG_TO_CONSOLE) {                           \
-            std::cout << "[" << __FILE__ << "::" << __func__ << "] " << log_msg << std::endl; \
-        }                                               \
+        std::cout << "[" << __FILE__ << "::" << __func__ << "] " << log_msg << std::endl;          \
         auto& log_file_ptr = get_log_file_ptr();        \
         if (log_file_ptr && log_file_ptr->is_open()) {  \
             *log_file_ptr << "[" << __FILE__ << "::" << __func__ << "] " << log_msg << std::endl; \
